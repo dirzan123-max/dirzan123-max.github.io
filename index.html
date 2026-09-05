@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="dirzan123 のポートフォリオ。Flutter で開発・公開した Android アプリ「楽々英単語」と「災害情報マップ」を紹介します。">
+  <meta name="color-scheme" content="light dark">
+  <title>dirzan123 | ポートフォリオ</title>
+  <link rel="icon" href="assets/vocab/icon.png">
+  <style>
+    /* ---------- 配色・基本設定 ---------- */
+    :root {
+      --bg: #f7f8fa;
+      --surface: #ffffff;
+      --text: #1f2933;
+      --text-sub: #52606d;
+      --line: #e1e5ea;
+      --accent: #0f766e;
+      --accent-soft: #e6f4f1;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 4px 16px rgba(0, 0, 0, .06);
+      --radius: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111417;
+        --surface: #1b1f24;
+        --text: #e6e9ec;
+        --text-sub: #a3adb8;
+        --line: #2c333b;
+        --accent: #5fd3c4;
+        --accent-soft: #163330;
+        --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .35);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { line-height: 1.35; margin: 0; }
+    p { margin: 0 0 .75em; }
+    ul { margin: 0; padding-left: 1.2em; }
+    li { margin-bottom: .35em; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+    /* ---------- ヘッダー ---------- */
+    .site-header { padding: 64px 0 40px; }
+    .site-header h1 { font-size: 2rem; letter-spacing: .02em; }
+    .site-header .lead { color: var(--text-sub); margin-top: 8px; }
+    .site-header nav { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: .95rem; }
+
+    /* ---------- セクション ---------- */
+    section { padding: 32px 0; }
+    section > .container > h2 {
+      font-size: 1.35rem;
+      padding-bottom: 10px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    /* ---------- 作品カード ---------- */
+    .work {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+    .work-head { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    .work-head img { width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0; }
+    .work-head h3 { font-size: 1.3rem; }
+    .work-head .platform { font-size: .85rem; color: var(--text-sub); }
+
+    .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 16px; padding: 0; list-style: none; }
+    .badges li {
+      margin: 0;
+      font-size: .8rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .work-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+    .work-body h4 { margin: 8px 0 4px; font-size: .95rem; color: var(--text-sub); font-weight: 600; }
+    @media (max-width: 640px) { .work-body { grid-template-columns: 1fr; } }
+
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .btn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      font-size: .9rem;
+      font-weight: 600;
+    }
+    .btn:hover { text-decoration: none; background: var(--accent-soft); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent); opacity: .9; }
+    @media (prefers-color-scheme: dark) { .btn-primary { color: #0b1a18; } }
+
+    /* ---------- スクリーンショット（横スクロール） ---------- */
+    .gallery {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      padding-bottom: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .gallery figure { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
+    .gallery img {
+      height: 380px;
+      width: auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+    }
+    .gallery figcaption { font-size: .8rem; color: var(--text-sub); margin-top: 4px; text-align: center; }
+    .gallery-hint { font-size: .8rem; color: var(--text-sub); margin: 4px 0 0; }
+
+    /* ---------- スキル ---------- */
+    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .skill {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+    .skill h3 { font-size: 1rem; margin-bottom: 6px; }
+    .skill p { font-size: .92rem; color: var(--text-sub); margin: 0; }
+
+    /* ---------- このサイトについて ---------- */
+    .about-site {
+      background: var(--accent-soft);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .about-site p:last-child { margin: 0; }
+
+    /* ---------- フッター ---------- */
+    .site-footer {
+      padding: 40px 0 48px;
+      font-size: .85rem;
+      color: var(--text-sub);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <h1>dirzan123</h1>
+      <p class="lead">Flutter で Android アプリを個人開発し、Google Play で公開しています。Python 歴 2 年。英語のゲームやドラマで英語を学んでいます。</p>
+      <nav aria-label="ページ内リンク">
+        <a href="#works">作品</a>
+        <a href="#skills">スキル</a>
+        <a href="#about-site">このサイトについて</a>
+        <a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="works">
+      <div class="container">
+        <h2>作品</h2>
+
+        <!-- 楽々英単語 -->
+        <article class="work">
+          <div class="work-head">
+            <img src="assets/vocab/icon.png" alt="楽々英単語のアイコン">
+            <div>
+              <h3>楽々英単語</h3>
+              <p class="platform">Android アプリ / Google Play で公開中（2026年9月〜）</p>
+            </div>
+          </div>
+          <p>ゲーム・アニメ・洋画を英語のまま楽しむための英単語アプリ。TOEIC や教科書に出ない生きた表現やスラングも、間隔反復と音声読み上げで無理なく暗記できます。</p>
+          <ul class="badges" aria-label="使用技術">
+            <li>Flutter</li><li>Dart</li><li>drift (SQLite)</li><li>flutter_local_notifications</li><li>google_mobile_ads</li><li>flutter_tts</li><li>fl_chart</li>
+          </ul>
+
+          <div class="work-body">
+            <div>
+              <h4>主な機能</h4>
+              <ul>
+                <li>2,500 語以上を同梱。全語に日本語の意味・英英定義・例文・和訳つき</li>
+                <li>間隔反復（1 → 3 → 7 → 14 → 30 日）で忘れかけた頃に自動で復習出題</li>
+                <li>学習 / 復習 / 再挑戦 / 予習の 4 モード、TOEIC スコアに応じた出題</li>
+                <li>経験値・レベル・ストリーク・実績、6 種類のスキン</li>
+                <li>学習記録のバックアップと復元、リマインダー通知、オフライン動作</li>
+              </ul>
+            </div>
+            <div>
+              <h4>工夫した点</h4>
+              <ul>
+                <li>間隔反復の状態（復習間隔・次回日）にゲーム要素が影響しないよう、完全に別レイヤーとして設計</li>
+                <li>DB スキーマ変更は移行テストを必ず追加し、既存ユーザーの学習データを壊さない運用ルールを文書化</li>
+                <li>単語データは CSV マスタから自動生成し、例文に見出し語が含まれるかをスクリプトで機械検証</li>
+                <li>ストア掲載文・ASO・リリース手順など、公開に必要な作業を一人で完結</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="links">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dirzan123.game_eng_vocab" target="_blank" rel="noopener">Google Play で見る</a>
+            <a class="btn" href="https://dirzan123-max.github.io/game-eng-vocab-policy/" target="_blank" rel="noopener">プライバシーポリシー</a>
+          </div>
+
+          <div class="gallery" aria-label="楽々英単語のスクリーンショット">
+            <figure><img src="assets/vocab/01_home.png" alt="ホーム画面" loading="lazy"><figcaption>ホーム</figcaption></figure>
+            <figure><img src="assets/vocab/02_card_front.png" alt="単語カードの表面" loading="lazy"><figcaption>単語カード（表）</figcaption></figure>
+            <figure><img src="assets/vocab/03_card_back.png" alt="単語カードの裏面。意味・英英定義・例文" loading="lazy"><figcaption>単語カード（裏）</figcaption></figure>
+            <figure><img src="assets/vocab/04_spaced_repetition.png" alt="間隔反復の説明画面" loading="lazy"><figcaption>間隔反復</figcaption></figure>
+            <figure><img src="assets/vocab/05_wordlist.png" alt="単語一覧画面" loading="lazy"><figcaption>単語一覧</figcaption></figure>
+            <figure><img src="assets/vocab/06_progress.png" alt="学習の進捗グラフ" loading="lazy"><figcaption>進捗</figcaption></figure>
+            <figure><img src="assets/vocab/07_achievements.png" alt="実績一覧" loading="lazy"><figcaption>実績</figcaption></figure>
+            <figure><img src="assets/vocab/08_skins.png" alt="スキン切り替え画面" loading="lazy"><figcaption>スキン</figcaption></figure>
+          </div>
+          <p class="gallery-hint">← 横にスクロールできます →</p>
+        </article>
+
+        <!-- 災害情報マップ -->
+        <article class="work">
+          <div class="work-head">
+            <img src="assets/disaster/icon.png" alt="災害情報マップのアイコン">
+            <div>
+              <h3>災害情報マップ</h3>
+              <p class="platform">Android / Windows / Web（1 つのコードベースから 3 プラットフォーム）</p>
+            </div>
+          </div>
+          <p>気象庁・USGS・NASA が公開している災害情報を集めて、1 つの地図と通知で示す BCP 向けアプリ。地震・津波・気象警報・火山・山火事・暴風・洪水を、国内外を切り替えずに 1 画面で確認できます。ブラウザでそのまま試せます。</p>
+          <ul class="badges" aria-label="使用技術">
+            <li>Flutter</li><li>Dart</li><li>flutter_map (OpenStreetMap)</li><li>WebSocket</li><li>WorkManager</li><li>GitHub Actions</li><li>Python（同梱データ生成）</li>
+          </ul>
+
+          <div class="work-body">
+            <div>
+              <h4>主な機能</h4>
+              <ul>
+                <li>国内は気象庁、国外は USGS / NASA EONET を地域に応じて自動で使い分け</li>
+                <li>種類の違う災害を共通の深刻度 0〜4 スケールに揃え、同じ色・基準で比較</li>
+                <li>災害の種類 / 深刻度 / 期間 / 国で絞り込み。条件は次回起動時も保持</li>
+                <li>Android は 15 分ごとのバックグラウンド監視と通知、WebSocket によるリアルタイム受信</li>
+                <li>Slack / Teams / Discord への Webhook 通知、英語の情報はアプリ内で日本語化</li>
+              </ul>
+            </div>
+            <div>
+              <h4>工夫した点</h4>
+              <ul>
+                <li>サーバーを持たない構成。CORS が許可された公開 API だけを選び、API キーなしで動作</li>
+                <li>データ源がない地域は地図をグレーで塗り、「情報がない＝安全」と誤解させない</li>
+                <li>最終更新・取得失敗・キャッシュ表示を常に画面に出し、いつの情報かを明示</li>
+                <li>保存した API レスポンスを使ったテスト 98 本で、CI がネットワークなしで通る</li>
+                <li>GitHub Actions で Web 版を自動デプロイ。設計判断と踏んだ不具合を README に記録</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="links">
+            <a class="btn btn-primary" href="https://dirzan123-max.github.io/disaster-map/" target="_blank" rel="noopener">ブラウザで試す</a>
+            <a class="btn" href="https://github.com/dirzan123-max/disaster-map" target="_blank" rel="noopener">ソースコード（GitHub）</a>
+          </div>
+
+          <div class="gallery" aria-label="災害情報マップのスクリーンショット">
+            <figure><img src="assets/disaster/01_map_pc.png" alt="世界地図に地震の発生地点を表示した画面" loading="lazy"><figcaption>地震（PC）</figcaption></figure>
+            <figure><img src="assets/disaster/02_warning_pc.png" alt="気象警報を表示。データ源のない日本以外はグレー表示" loading="lazy"><figcaption>気象警報。対象外の地域はグレー（PC）</figcaption></figure>
+            <figure><img src="assets/disaster/03_map_mobile.png" alt="スマートフォン幅での地図表示" loading="lazy"><figcaption>スマートフォン幅</figcaption></figure>
+          </div>
+          <p class="gallery-hint">← 横にスクロールできます →</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills">
+      <div class="container">
+        <h2>スキル</h2>
+        <div class="skills">
+          <div class="skill">
+            <h3>Flutter / Dart</h3>
+            <p>Android アプリを 2 本開発。ローカル DB、通知、バックグラウンド処理、広告、Web / Windows ビルドまで経験。</p>
+          </div>
+          <div class="skill">
+            <h3>Google Play 公開</h3>
+            <p>クローズドテストから製品版公開まで一通り実施。ストア掲載文、署名、リリースビルド固有の不具合対応。</p>
+          </div>
+          <div class="skill">
+            <h3>Python</h3>
+            <p>2 年。データ加工スクリプト、アプリ同梱データ（座標・国境）の生成ツールを作成。</p>
+          </div>
+          <div class="skill">
+            <h3>Git / GitHub Actions</h3>
+            <p>日常的に Git を使用。CI でのテスト実行、GitHub Pages への自動デプロイ、定期実行ワークフローを構築。</p>
+          </div>
+          <div class="skill">
+            <h3>SQLite / drift</h3>
+            <p>スキーマのマイグレーション設計と移行テスト。公開済みアプリのデータを壊さない変更手順。</p>
+          </div>
+          <div class="skill">
+            <h3>HTML / CSS</h3>
+            <p>このサイトを手書きで作成。レスポンシブ、ダークモード、アクセシビリティに配慮。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about-site">
+      <div class="container">
+        <h2>このサイトについて</h2>
+        <div class="about-site">
+          <p>このポートフォリオは、フレームワークやテンプレートを使わず、HTML と CSS だけで作っています（JavaScript 不使用）。画面幅に応じたレイアウト切り替え、OS 設定に合わせたダークモード、画像の代替テキストなどに配慮しました。GitHub Pages で公開しています。</p>
+          <p><a href="https://github.com/dirzan123-max/dirzan123-max.github.io" target="_blank" rel="noopener">このサイトのソースコードを見る</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">github.com/dirzan123-max</a>
+    </div>
+  </footer>
+
+</body>
+</html>
