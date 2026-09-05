@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="dirzan123 のポートフォリオ。Flutter で開発・公開した Android アプリ「楽々英単語」と「災害情報マップ」を紹介します。">
+  <meta name="description" content="Flutter で開発・公開した Android アプリ「楽々英単語」と「災害情報マップ」の紹介。">
   <meta name="color-scheme" content="light dark">
-  <title>dirzan123 | ポートフォリオ</title>
+  <title>個人開発アプリの紹介</title>
   <link rel="icon" href="assets/vocab/icon.png">
   <style>
     /* ---------- 配色・基本設定 ---------- */
@@ -131,17 +131,6 @@
     .gallery figcaption { font-size: .8rem; color: var(--text-sub); margin-top: 4px; text-align: center; }
     .gallery-hint { font-size: .8rem; color: var(--text-sub); margin: 4px 0 0; }
 
-    /* ---------- スキル ---------- */
-    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .skill {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-    }
-    .skill h3 { font-size: 1rem; margin-bottom: 6px; }
-    .skill p { font-size: .92rem; color: var(--text-sub); margin: 0; }
-
     /* ---------- このサイトについて ---------- */
     .about-site {
       background: var(--accent-soft);
@@ -163,11 +152,10 @@
 
   <header class="site-header">
     <div class="container">
-      <h1>dirzan123</h1>
-      <p class="lead">Flutter で Android アプリを個人開発し、Google Play で公開しています。Python 歴 2 年。英語のゲームやドラマで英語を学んでいます。</p>
+      <h1>個人開発アプリの紹介</h1>
+      <p class="lead">Flutter で Android アプリを個人開発し、Google Play で公開しています。アプリもこのサイトも、AI（Claude Code）を使ってコーディングしています。</p>
       <nav aria-label="ページ内リンク">
         <a href="#works">作品</a>
-        <a href="#skills">スキル</a>
         <a href="#about-site">このサイトについて</a>
         <a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">GitHub</a>
       </nav>
@@ -210,7 +198,7 @@
                 <li>間隔反復の状態（復習間隔・次回日）にゲーム要素が影響しないよう、完全に別レイヤーとして設計</li>
                 <li>DB スキーマ変更は移行テストを必ず追加し、既存ユーザーの学習データを壊さない運用ルールを文書化</li>
                 <li>単語データは CSV マスタから自動生成し、例文に見出し語が含まれるかをスクリプトで機械検証</li>
-                <li>ストア掲載文・ASO・リリース手順など、公開に必要な作業を一人で完結</li>
+                <li>ストア掲載文の作成、リリース手順の整備、公開後の不具合修正とアップデート</li>
               </ul>
             </div>
           </div>
@@ -285,43 +273,11 @@
       </div>
     </section>
 
-    <section id="skills">
-      <div class="container">
-        <h2>スキル</h2>
-        <div class="skills">
-          <div class="skill">
-            <h3>Flutter / Dart</h3>
-            <p>Android アプリを 2 本開発。ローカル DB、通知、バックグラウンド処理、広告、Web / Windows ビルドまで経験。</p>
-          </div>
-          <div class="skill">
-            <h3>Google Play 公開</h3>
-            <p>クローズドテストから製品版公開まで一通り実施。ストア掲載文、署名、リリースビルド固有の不具合対応。</p>
-          </div>
-          <div class="skill">
-            <h3>Python</h3>
-            <p>2 年。データ加工スクリプト、アプリ同梱データ（座標・国境）の生成ツールを作成。</p>
-          </div>
-          <div class="skill">
-            <h3>Git / GitHub Actions</h3>
-            <p>日常的に Git を使用。CI でのテスト実行、GitHub Pages への自動デプロイ、定期実行ワークフローを構築。</p>
-          </div>
-          <div class="skill">
-            <h3>SQLite / drift</h3>
-            <p>スキーマのマイグレーション設計と移行テスト。公開済みアプリのデータを壊さない変更手順。</p>
-          </div>
-          <div class="skill">
-            <h3>HTML / CSS</h3>
-            <p>このサイトを手書きで作成。レスポンシブ、ダークモード、アクセシビリティに配慮。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section id="about-site">
       <div class="container">
         <h2>このサイトについて</h2>
         <div class="about-site">
-          <p>このポートフォリオは、フレームワークやテンプレートを使わず、HTML と CSS だけで作っています（JavaScript 不使用）。画面幅に応じたレイアウト切り替え、OS 設定に合わせたダークモード、画像の代替テキストなどに配慮しました。GitHub Pages で公開しています。</p>
+          <p>HTML と CSS だけで構成した 1 ページのサイトです。コーディングには AI（Claude Code）を使い、GitHub Pages で公開しています。</p>
           <p><a href="https://github.com/dirzan123-max/dirzan123-max.github.io" target="_blank" rel="noopener">このサイトのソースコードを見る</a></p>
         </div>
       </div>
