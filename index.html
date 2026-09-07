@@ -7,193 +7,346 @@
   <meta name="color-scheme" content="light dark">
   <title>個人開発アプリの紹介</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
   <style>
-    /* ---------- 配色・基本設定 ---------- */
+    /* ---------- トークン（明るいテーマ = 既定） ---------- */
     :root {
-      --bg: #f7f8fa;
-      --surface: #ffffff;
-      --text: #1f2933;
-      --text-sub: #52606d;
-      --line: #e1e5ea;
-      --accent: #0f766e;
-      --accent-soft: #e6f4f1;
-      --shadow: 0 1px 2px rgba(0, 0, 0, .05), 0 4px 16px rgba(0, 0, 0, .06);
-      --radius: 14px;
+      --paper:      #eceef1;   /* 青みを少し含んだ紙色 */
+      --field:      #f8f9fa;   /* 図版などのわずかに明るい面 */
+      --ink:        #191d24;
+      --ink-2:      #59616e;
+      --ink-3:      #838b97;
+      --rule:       #d4d9df;
+      --rule-soft:  #e2e6ea;
+      --accent:     #23457a;   /* 藍 */
+      --accent-ink: #ffffff;
+      --accent-bg:  #dfe5ef;
+      --mark:       #9c3a46;   /* 臙脂。公開中の印だけに使う */
+
+      --sev-0: #9aa1ab;
+      --sev-1: #c19a34;
+      --sev-2: #cf7a37;
+      --sev-3: #b6453c;
+      --sev-4: #82375c;
+
+      --serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      --sans: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Segoe UI", Meiryo, sans-serif;
+      --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Courier New", monospace;
     }
+
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #111417;
-        --surface: #1b1f24;
-        --text: #e6e9ec;
-        --text-sub: #a3adb8;
-        --line: #2c333b;
-        --accent: #5fd3c4;
-        --accent-soft: #163330;
-        --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 16px rgba(0, 0, 0, .35);
+        --paper:      #15181d;
+        --field:      #1b1f26;
+        --ink:        #e6e9ed;
+        --ink-2:      #9aa2ae;
+        --ink-3:      #79818d;
+        --rule:       #2c323b;
+        --rule-soft:  #232830;
+        --accent:     #8fb4e8;
+        --accent-ink: #10182a;
+        --accent-bg:  #1e2735;
+        --mark:       #d98d97;
+
+        --sev-0: #7d848e;
+        --sev-1: #cbaa4c;
+        --sev-2: #d98d4f;
+        --sev-3: #cc5f56;
+        --sev-4: #a2557d;
       }
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Segoe UI", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
       font-size: 16px;
-      line-height: 1.75;
+      line-height: 1.85;
       -webkit-font-smoothing: antialiased;
+      text-underline-offset: .25em;
     }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    img { max-width: 100%; display: block; }
-    h1, h2, h3 { line-height: 1.35; margin: 0; }
-    p { margin: 0 0 .75em; }
-    ul { margin: 0; padding-left: 1.2em; }
-    li { margin-bottom: .35em; }
 
-    .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+    a { color: var(--accent); }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+    img { max-width: 100%; display: block; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.4; margin: 0; text-wrap: balance; }
+    p { margin: 0; }
+
+    .wrap { width: min(1080px, 100% - 48px); margin-inline: auto; }
+    @media (max-width: 640px) { .wrap { width: calc(100% - 32px); } }
+
+    /* mono の小ラベル。見出しの上や図の注記に使う */
+    .label {
+      font-family: var(--mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      color: var(--ink-3);
+    }
 
     /* ---------- ヘッダー ---------- */
-    .site-header { padding: 64px 0 40px; }
-    .site-header h1 { font-size: 2rem; letter-spacing: .02em; }
-    .site-header .lead { color: var(--text-sub); margin-top: 8px; }
-    .site-header nav { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: .95rem; }
-
-    /* ---------- セクション ---------- */
-    section { padding: 32px 0; }
-    section > .container > h2 {
-      font-size: 1.35rem;
-      padding-bottom: 10px;
-      margin-bottom: 24px;
-      border-bottom: 2px solid var(--line);
+    .masthead { padding: 64px 0 28px; border-bottom: 1px solid var(--rule); }
+    .masthead h1 { font-size: clamp(1.6rem, 3.4vw, 2.1rem); letter-spacing: .01em; }
+    .masthead .lead {
+      max-width: 34em;
+      margin-top: 16px;
+      color: var(--ink-2);
     }
-
-    /* ---------- 作品カード ---------- */
-    .work {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 28px;
-      margin-bottom: 32px;
-    }
-    .work-head { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
-    .work-head img { width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0; }
-    .work-head h3 { font-size: 1.3rem; }
-    .work-head .platform { font-size: .85rem; color: var(--text-sub); }
-
-    .badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 16px; padding: 0; list-style: none; }
-    .badges li {
-      margin: 0;
+    .masthead .handle {
+      margin-top: 16px;
+      font-family: var(--mono);
       font-size: .8rem;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
+    }
+    .masthead .handle a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--rule); }
+    .masthead .handle a:hover { color: var(--ink); border-bottom-color: currentColor; }
+
+    /* ---------- 作品 ---------- */
+    .work {
+      padding: 56px 0 16px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .work:last-of-type { border-bottom: none; }
+    .work-top {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 0 56px;
+    }
+    @media (max-width: 900px) {
+      .work { padding-top: 44px; }
+      .work-top { grid-template-columns: 1fr; }
     }
 
-    .work-body { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
-    .work-body h4 { margin: 8px 0 4px; font-size: .95rem; color: var(--text-sub); font-weight: 600; }
-    @media (max-width: 640px) { .work-body { grid-template-columns: 1fr; } }
+    /* 左：識別情報 */
+    .work-id { align-self: start; }
 
-    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .work-id .icon { width: 60px; height: 60px; border-radius: 13px; border: 1px solid var(--rule); }
+    .work-id h2 { font-size: 1.6rem; margin-top: 16px; }
+    .work-id .status {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 10px;
+      font-family: var(--mono); font-size: .78rem; color: var(--ink-2);
+    }
+    .work-id .status::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mark); flex: none;
+    }
+    .work-id .platform { margin-top: 6px; font-size: .82rem; color: var(--ink-2); line-height: 1.7; }
+
+    .stack { margin: 26px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--rule-soft); }
+    .stack li {
+      font-family: var(--mono);
+      font-size: .78rem;
+      color: var(--ink-2);
+      padding: 5px 0;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+
+    .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
     .btn {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--accent);
-      font-size: .9rem;
+      font-size: .86rem;
       font-weight: 600;
+      text-decoration: none;
+      padding: 9px 15px;
+      border: 1px solid var(--accent);
+      border-radius: 3px;
+      color: var(--accent);
+      transition: background-color .15s ease;
     }
-    .btn:hover { text-decoration: none; background: var(--accent-soft); }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: var(--accent); opacity: .9; }
-    @media (prefers-color-scheme: dark) { .btn-primary { color: #0b1a18; } }
+    .btn:hover { background: var(--accent-bg); }
+    .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .btn-primary { background: var(--accent); color: var(--accent-ink); }
+    .btn-primary:hover { background: var(--accent); filter: brightness(1.15); }
 
-    /* ---------- スクリーンショット（横スクロール） ---------- */
-    .gallery {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
+    /* 右：本文 */
+    .work-body { padding-top: 4px; }
+    @media (max-width: 900px) { .work-body { padding-top: 30px; } }
+    .work-body .summary { font-size: 1.05rem; max-width: 40em; }
+
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 48px; margin-top: 34px; }
+    @media (max-width: 760px) { .cols { grid-template-columns: 1fr; gap: 28px; } }
+
+    .cols h3 {
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: .74rem;
+      letter-spacing: .14em;
+      color: var(--ink-3);
       padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .cols ul { margin: 14px 0 0; padding: 0; list-style: none; }
+    .cols li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 12px;
+      font-size: .94rem;
+      line-height: 1.8;
+    }
+    .cols li::before {
+      content: "";
+      position: absolute;
+      left: 0; top: .85em;
+      width: 10px; height: 1px;
+      background: var(--ink-3);
+    }
+
+    /* ---------- 作品ごとの図 ---------- */
+    .figure {
+      margin-top: 32px;
+      padding: 18px 20px 20px;
+      background: var(--field);
+      border: 1px solid var(--rule-soft);
+      border-radius: 4px;
+      max-width: 40em;
+    }
+    .figure .label { display: block; margin-bottom: 14px; }
+    .figure .note { margin-top: 14px; font-size: .8rem; color: var(--ink-2); line-height: 1.7; }
+
+    /* 間隔反復のはしご */
+    .ladder { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .ladder span {
+      font-family: var(--mono);
+      font-variant-numeric: tabular-nums;
+      font-size: .95rem;
+      color: var(--ink);
+      padding: 2px 9px;
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      background: var(--paper);
+    }
+    .ladder i { color: var(--ink-3); font-style: normal; font-size: .8rem; }
+    .ladder em { font-style: normal; font-size: .85rem; color: var(--ink-2); margin-left: 4px; }
+
+    /* 深刻度スケール */
+    .scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .scale div { text-align: center; }
+    .scale b { display: block; height: 8px; border-radius: 2px; }
+    .scale em {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: .74rem;
+      color: var(--ink-2);
+    }
+    .scale-ends {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2px;
+      font-size: .78rem;
+      color: var(--ink-2);
+    }
+
+    /* ---------- スクリーンショット ---------- */
+    .shots-head {
+      display: flex; justify-content: flex-end;
+      margin: 40px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .shots {
+      display: flex;
+      gap: 14px;
       overflow-x: auto;
-      scroll-snap-type: x mandatory;
+      padding-bottom: 14px;
+      scroll-snap-type: x proximity;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
     }
-    .gallery figure { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
-    .gallery img {
-      height: 380px;
+    .shots:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+    .shots figure { margin: 0; flex: 0 0 auto; scroll-snap-align: start; }
+    .shots img {
+      height: 370px;
       width: auto;
-      border-radius: 10px;
-      border: 1px solid var(--line);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      background: var(--field);
     }
-    .gallery figcaption { font-size: .8rem; color: var(--text-sub); margin-top: 4px; text-align: center; }
-    .gallery-hint { font-size: .8rem; color: var(--text-sub); margin: 4px 0 0; }
-
-    /* ---------- このサイトについて ---------- */
-    .about-site {
-      background: var(--accent-soft);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-    }
-    .about-site p:last-child { margin: 0; }
-
-    /* ---------- フッター ---------- */
-    .site-footer {
-      padding: 40px 0 48px;
-      font-size: .85rem;
-      color: var(--text-sub);
+    .shots figcaption {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: .74rem;
+      color: var(--ink-2);
       text-align: center;
+    }
+    @media (max-width: 640px) { .shots img { height: 300px; } }
+
+    main { padding-bottom: 72px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition-duration: .01ms !important; }
     }
   </style>
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="container">
+  <header class="masthead">
+    <div class="wrap">
       <h1>個人開発アプリの紹介</h1>
-      <p class="lead">Flutter で Android アプリを個人開発し、Google Play で公開しています。アプリもこのサイトも、AI を使ってコーディングしています。</p>
-      <nav aria-label="ページ内リンク">
-        <a href="#works">作品</a>
-        <a href="#about-site">このサイトについて</a>
-        <a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">GitHub</a>
-      </nav>
+      <p class="lead">Flutter で Android アプリを個人開発し、Google Play で公開しています。アプリもこのサイトも、コーディングには AI を使っています。</p>
+      <p class="handle"><a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">github.com/dirzan123-max</a></p>
     </div>
   </header>
 
   <main>
-    <section id="works">
-      <div class="container">
-        <h2>作品</h2>
+    <div class="wrap">
 
-        <!-- 楽々英単語 -->
-        <article class="work">
-          <div class="work-head">
-            <img src="assets/vocab/icon.png" alt="楽々英単語のアイコン">
-            <div>
-              <h3>楽々英単語</h3>
-              <p class="platform">Android アプリ / Google Play で公開中（2026年9月〜）</p>
-            </div>
-          </div>
-          <p>ゲーム・アニメ・洋画を英語のまま楽しむための英単語アプリ。TOEIC や教科書に出ない生きた表現やスラングも、間隔反復と音声読み上げで無理なく暗記できます。</p>
-          <ul class="badges" aria-label="使用技術">
-            <li>Flutter</li><li>Dart</li><li>drift (SQLite)</li><li>flutter_local_notifications</li><li>google_mobile_ads</li><li>flutter_tts</li><li>fl_chart</li>
+      <!-- 楽々英単語 -->
+      <article class="work" id="vocab">
+        <div class="work-top">
+        <div class="work-id">
+          <img class="icon" src="assets/vocab/icon.png" alt="楽々英単語のアイコン">
+          <h2>楽々英単語</h2>
+          <p class="status">公開中 2026.09 —</p>
+          <p class="platform">Android アプリ / Google Play</p>
+
+          <ul class="stack" aria-label="使用技術">
+            <li>Flutter / Dart</li>
+            <li>drift (SQLite)</li>
+            <li>flutter_local_notifications</li>
+            <li>google_mobile_ads</li>
+            <li>flutter_tts</li>
+            <li>fl_chart</li>
           </ul>
 
-          <div class="work-body">
+          <div class="links">
+            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dirzan123.game_eng_vocab" target="_blank" rel="noopener">Google Play で見る</a>
+            <a class="btn" href="https://dirzan123-max.github.io/game-eng-vocab-policy/" target="_blank" rel="noopener">プライバシーポリシー</a>
+          </div>
+        </div>
+
+        <div class="work-body">
+          <p class="summary">ゲーム・アニメ・洋画を英語のまま楽しむための英単語アプリ。TOEIC や教科書に出ない生きた表現やスラングも、間隔反復と音声読み上げで無理なく暗記できます。</p>
+
+          <div class="figure">
+            <span class="label">同じ単語が次に出るまでの日数</span>
+            <div class="ladder">
+              <span>1</span><i>→</i><span>3</span><i>→</i><span>7</span><i>→</i><span>14</span><i>→</i><span>30</span><em>日後</em>
+            </div>
+            <p class="note">正解するたびに、次に出るまでの間隔が広がります。間違えた単語は 1 日後に戻り、忘れかけた頃にまた出てきます。</p>
+          </div>
+
+          <div class="cols">
             <div>
-              <h4>主な機能</h4>
+              <h3>主な機能</h3>
               <ul>
                 <li>2,500 語以上を同梱。全語に日本語の意味・英英定義・例文・和訳つき</li>
-                <li>間隔反復（1 → 3 → 7 → 14 → 30 日）で忘れかけた頃に自動で復習出題</li>
+                <li>間隔反復で、忘れかけた頃に自動で復習出題</li>
                 <li>学習 / 復習 / 再挑戦 / 予習の 4 モード、TOEIC スコアに応じた出題</li>
                 <li>経験値・レベル・ストリーク・実績、6 種類のスキン</li>
                 <li>学習記録のバックアップと復元、リマインダー通知、オフライン動作</li>
               </ul>
             </div>
             <div>
-              <h4>工夫した点</h4>
+              <h3>工夫した点</h3>
               <ul>
                 <li>間隔反復の状態（復習間隔・次回日）にゲーム要素が影響しないよう、完全に別レイヤーとして設計</li>
                 <li>DB スキーマ変更は移行テストを必ず追加し、既存ユーザーの学習データを壊さない運用ルールを文書化</li>
@@ -202,13 +355,15 @@
               </ul>
             </div>
           </div>
+        </div>
 
-          <div class="links">
-            <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=com.dirzan123.game_eng_vocab" target="_blank" rel="noopener">Google Play で見る</a>
-            <a class="btn" href="https://dirzan123-max.github.io/game-eng-vocab-policy/" target="_blank" rel="noopener">プライバシーポリシー</a>
+        </div><!-- /.work-top -->
+
+        <div class="shots-wide">
+          <div class="shots-head">
+            <span class="label">→ 横スクロール</span>
           </div>
-
-          <div class="gallery" aria-label="楽々英単語のスクリーンショット">
+          <div class="shots" tabindex="0" role="group" aria-label="楽々英単語のスクリーンショット">
             <figure><img src="assets/vocab/01_home.png" alt="ホーム画面" loading="lazy"><figcaption>ホーム</figcaption></figure>
             <figure><img src="assets/vocab/02_card_front.png" alt="単語カードの表面" loading="lazy"><figcaption>単語カード（表）</figcaption></figure>
             <figure><img src="assets/vocab/03_card_back.png" alt="単語カードの裏面。意味・英英定義・例文" loading="lazy"><figcaption>単語カード（裏）</figcaption></figure>
@@ -218,77 +373,88 @@
             <figure><img src="assets/vocab/07_achievements.png" alt="実績一覧" loading="lazy"><figcaption>実績</figcaption></figure>
             <figure><img src="assets/vocab/08_skins.png" alt="スキン切り替え画面" loading="lazy"><figcaption>スキン</figcaption></figure>
           </div>
-          <p class="gallery-hint">← 横にスクロールできます →</p>
-        </article>
+        </div>
+      </article>
 
-        <!-- 災害情報マップ -->
-        <article class="work">
-          <div class="work-head">
-            <img src="assets/disaster/icon.png" alt="災害情報マップのアイコン">
-            <div>
-              <h3>災害情報マップ</h3>
-              <p class="platform">Android / Windows / Web（1 つのコードベースから 3 プラットフォーム）</p>
-            </div>
-          </div>
-          <p>気象庁・USGS・NASA が公開している災害情報を集めて、1 つの地図と通知で示す BCP 向けアプリ。地震・津波・気象警報・火山・山火事・暴風・洪水を、国内外を切り替えずに 1 画面で確認できます。ブラウザでそのまま試せます。</p>
-          <ul class="badges" aria-label="使用技術">
-            <li>Flutter</li><li>Dart</li><li>flutter_map (OpenStreetMap)</li><li>WebSocket</li><li>WorkManager</li><li>GitHub Actions</li><li>Python（同梱データ生成）</li>
+      <!-- 災害情報マップ -->
+      <article class="work" id="disaster">
+        <div class="work-top">
+        <div class="work-id">
+          <img class="icon" src="assets/disaster/icon.png" alt="災害情報マップのアイコン">
+          <h2>災害情報マップ</h2>
+          <p class="status">ブラウザで試せます</p>
+          <p class="platform">Android / Windows / Web<br>1 つのコードベースから 3 プラットフォーム</p>
+
+          <ul class="stack" aria-label="使用技術">
+            <li>Flutter / Dart</li>
+            <li>flutter_map (OpenStreetMap)</li>
+            <li>WebSocket</li>
+            <li>WorkManager</li>
+            <li>GitHub Actions</li>
+            <li>Python（同梱データ生成）</li>
           </ul>
 
-          <div class="work-body">
+          <div class="links">
+            <a class="btn btn-primary" href="https://dirzan123-max.github.io/disaster-map/" target="_blank" rel="noopener">ブラウザで試す</a>
+            <a class="btn" href="https://github.com/dirzan123-max/disaster-map" target="_blank" rel="noopener">ソースコード</a>
+          </div>
+        </div>
+
+        <div class="work-body">
+          <p class="summary">気象庁・USGS・NASA が公開している災害情報を集めて、1 つの地図と通知で示す BCP 向けアプリ。地震・津波・気象警報・火山・山火事・暴風・洪水を、国内外を切り替えずに 1 画面で確認できます。</p>
+
+          <div class="figure">
+            <span class="label">災害の深刻度を 5 段階に統一</span>
+            <div class="scale" aria-hidden="true">
+              <div><b style="background: var(--sev-0)"></b><em>0</em></div>
+              <div><b style="background: var(--sev-1)"></b><em>1</em></div>
+              <div><b style="background: var(--sev-2)"></b><em>2</em></div>
+              <div><b style="background: var(--sev-3)"></b><em>3</em></div>
+              <div><b style="background: var(--sev-4)"></b><em>4</em></div>
+            </div>
+            <p class="scale-ends"><span>軽い</span><span>重大</span></p>
+            <p class="note">地震の震度、気象警報、噴火警戒レベルは、本来それぞれ別の尺度です。これを 0〜4 の 5 段階に揃えているので、種類の違う災害でも、色が同じなら深刻さが同じだと分かります。</p>
+          </div>
+
+          <div class="cols">
             <div>
-              <h4>主な機能</h4>
+              <h3>主な機能</h3>
               <ul>
                 <li>国内は気象庁、国外は USGS / NASA EONET を地域に応じて自動で使い分け</li>
-                <li>種類の違う災害を共通の深刻度 0〜4 スケールに揃え、同じ色・基準で比較</li>
+                <li>種類の違う災害を共通の深刻度スケールに揃え、同じ色・基準で比較</li>
                 <li>災害の種類 / 深刻度 / 期間 / 国で絞り込み。条件は次回起動時も保持</li>
                 <li>Android は 15 分ごとのバックグラウンド監視と通知、WebSocket によるリアルタイム受信</li>
                 <li>Slack / Teams / Discord への Webhook 通知、英語の情報はアプリ内で日本語化</li>
               </ul>
             </div>
             <div>
-              <h4>工夫した点</h4>
+              <h3>工夫した点</h3>
               <ul>
                 <li>サーバーを持たない構成。CORS が許可された公開 API だけを選び、API キーなしで動作</li>
-                <li>データ源がない地域は地図をグレーで塗り、「情報がない＝安全」と誤解させない</li>
                 <li>最終更新・取得失敗・キャッシュ表示を常に画面に出し、いつの情報かを明示</li>
                 <li>保存した API レスポンスを使ったテスト 98 本で、CI がネットワークなしで通る</li>
                 <li>GitHub Actions で Web 版を自動デプロイ。設計判断と踏んだ不具合を README に記録</li>
               </ul>
             </div>
           </div>
+        </div>
 
-          <div class="links">
-            <a class="btn btn-primary" href="https://dirzan123-max.github.io/disaster-map/" target="_blank" rel="noopener">ブラウザで試す</a>
-            <a class="btn" href="https://github.com/dirzan123-max/disaster-map" target="_blank" rel="noopener">ソースコード（GitHub）</a>
+        </div><!-- /.work-top -->
+
+        <div class="shots-wide">
+          <div class="shots-head">
+            <span class="label">→ 横スクロール</span>
           </div>
-
-          <div class="gallery" aria-label="災害情報マップのスクリーンショット">
+          <div class="shots" tabindex="0" role="group" aria-label="災害情報マップのスクリーンショット">
             <figure><img src="assets/disaster/01_map_pc.png" alt="世界地図に地震の発生地点を表示した画面" loading="lazy"><figcaption>地震（PC）</figcaption></figure>
-            <figure><img src="assets/disaster/02_warning_pc.png" alt="気象警報を表示。データ源のない日本以外はグレー表示" loading="lazy"><figcaption>気象警報。対象外の地域はグレー（PC）</figcaption></figure>
+            <figure><img src="assets/disaster/02_warning_pc.png" alt="気象警報を表示。データ源のない日本以外はグレー表示" loading="lazy"><figcaption>気象警報。対象外はグレー（PC）</figcaption></figure>
             <figure><img src="assets/disaster/03_map_mobile.png" alt="スマートフォン幅での地図表示" loading="lazy"><figcaption>スマートフォン幅</figcaption></figure>
           </div>
-          <p class="gallery-hint">← 横にスクロールできます →</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="about-site">
-      <div class="container">
-        <h2>このサイトについて</h2>
-        <div class="about-site">
-          <p>HTML と CSS だけで構成した 1 ページのサイトです。コーディングには AI を使い、GitHub Pages で公開しています。</p>
-          <p><a href="https://github.com/dirzan123-max/dirzan123-max.github.io" target="_blank" rel="noopener">このサイトのソースコードを見る</a></p>
         </div>
-      </div>
-    </section>
-  </main>
+      </article>
 
-  <footer class="site-footer">
-    <div class="container">
-      <a href="https://github.com/dirzan123-max" target="_blank" rel="noopener">github.com/dirzan123-max</a>
     </div>
-  </footer>
+  </main>
 
 </body>
 </html>
