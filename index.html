@@ -171,6 +171,8 @@
 
     .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 48px; margin-top: 34px; }
     @media (max-width: 760px) { .cols { grid-template-columns: 1fr; gap: 28px; } }
+    /* 片方の列しかない作品は 1 列で組む */
+    .cols-single { grid-template-columns: 1fr; max-width: 40em; }
 
     .cols h3 {
       font-family: var(--mono);
@@ -324,14 +326,14 @@
         </div>
 
         <div class="work-body">
-          <p class="summary">ゲーム・アニメ・洋画を英語のまま楽しむための英単語アプリ。TOEIC や教科書に出ない生きた表現やスラングも、間隔反復と音声読み上げで無理なく暗記できます。</p>
+          <p class="summary">ゲーム・アニメ・洋画を英語のまま楽しむための英単語アプリ。TOEIC や教科書に出ない生きた表現やスラングも、間隔反復で効率よく暗記できます。</p>
 
           <div class="figure">
             <span class="label">同じ単語が次に出るまでの日数</span>
             <div class="ladder">
               <span>1</span><i>→</i><span>3</span><i>→</i><span>7</span><i>→</i><span>14</span><i>→</i><span>30</span><em>日後</em>
             </div>
-            <p class="note">正解するたびに、次に出るまでの間隔が広がります。間違えた単語は 1 日後に戻り、忘れかけた頃にまた出てきます。</p>
+            <p class="note">正解するたびに、次に出るまでの間隔が広がります。間違えた単語は習得ステージが 1 ランク下がり、忘れかけた頃にまた出てきます。</p>
           </div>
 
           <div class="cols">
@@ -343,15 +345,16 @@
                 <li>学習 / 復習 / 再挑戦 / 予習の 4 モード、TOEIC スコアに応じた出題</li>
                 <li>経験値・レベル・ストリーク・実績、6 種類のスキン</li>
                 <li>学習記録のバックアップと復元、リマインダー通知、オフライン動作</li>
+                <li>（作成中）習得中・習得済の単語を使用した長文を自動生成する、長文読解モード</li>
               </ul>
             </div>
             <div>
               <h3>工夫した点</h3>
               <ul>
+                <li>ユーザーのレベルに合わせた出題難易度の重みづけ</li>
+                <li>ユーザーの目的に合わせて、TOEIC・試験対策向けの単語か、口語表現・スラングを多く出題するかを選択可能</li>
                 <li>間隔反復の状態（復習間隔・次回日）にゲーム要素が影響しないよう、完全に別レイヤーとして設計</li>
                 <li>DB スキーマ変更は移行テストを必ず追加し、既存ユーザーの学習データを壊さない運用ルールを文書化</li>
-                <li>単語データは CSV マスタから自動生成し、例文に見出し語が含まれるかをスクリプトで機械検証</li>
-                <li>ストア掲載文の作成、リリース手順の整備、公開後の不具合修正とアップデート</li>
               </ul>
             </div>
           </div>
@@ -361,7 +364,7 @@
 
         <div class="shots-wide">
           <div class="shots-head">
-            <span class="label">→ 横スクロール</span>
+            <span class="label">→</span>
           </div>
           <div class="shots" tabindex="0" role="group" aria-label="楽々英単語のスクリーンショット">
             <figure><img src="assets/vocab/01_home.png" alt="ホーム画面" loading="lazy"><figcaption>ホーム</figcaption></figure>
@@ -401,7 +404,7 @@
         </div>
 
         <div class="work-body">
-          <p class="summary">気象庁・USGS・NASA が公開している災害情報を集めて、1 つの地図と通知で示す BCP 向けアプリ。地震・津波・気象警報・火山・山火事・暴風・洪水を、国内外を切り替えずに 1 画面で確認できます。</p>
+          <p class="summary">気象庁・USGS・NASA が公開している災害情報を集めて、1 つの地図と通知で示す BCP 向けアプリ。地震・津波・気象警報・火山・山火事・暴風・洪水を、1 画面で確認できます。</p>
 
           <div class="figure">
             <span class="label">災害の深刻度を 5 段階に統一</span>
@@ -413,10 +416,10 @@
               <div><b style="background: var(--sev-4)"></b><em>4</em></div>
             </div>
             <p class="scale-ends"><span>軽い</span><span>重大</span></p>
-            <p class="note">地震の震度、気象警報、噴火警戒レベルは、本来それぞれ別の尺度です。これを 0〜4 の 5 段階に揃えているので、種類の違う災害でも、色が同じなら深刻さが同じだと分かります。</p>
+            <p class="note">地震の震度、気象警報、噴火警戒レベルは、本来それぞれ別の尺度ですが、これを 0〜4 の 5 段階にし、深刻さを視覚でわかるようにしています。</p>
           </div>
 
-          <div class="cols">
+          <div class="cols cols-single">
             <div>
               <h3>主な機能</h3>
               <ul>
@@ -427,15 +430,6 @@
                 <li>Slack / Teams / Discord への Webhook 通知、英語の情報はアプリ内で日本語化</li>
               </ul>
             </div>
-            <div>
-              <h3>工夫した点</h3>
-              <ul>
-                <li>サーバーを持たない構成。CORS が許可された公開 API だけを選び、API キーなしで動作</li>
-                <li>最終更新・取得失敗・キャッシュ表示を常に画面に出し、いつの情報かを明示</li>
-                <li>保存した API レスポンスを使ったテスト 98 本で、CI がネットワークなしで通る</li>
-                <li>GitHub Actions で Web 版を自動デプロイ。設計判断と踏んだ不具合を README に記録</li>
-              </ul>
-            </div>
           </div>
         </div>
 
@@ -443,7 +437,7 @@
 
         <div class="shots-wide">
           <div class="shots-head">
-            <span class="label">→ 横スクロール</span>
+            <span class="label">→</span>
           </div>
           <div class="shots" tabindex="0" role="group" aria-label="災害情報マップのスクリーンショット">
             <figure><img src="assets/disaster/01_map_pc.png" alt="世界地図に地震の発生地点を表示した画面" loading="lazy"><figcaption>地震（PC）</figcaption></figure>
